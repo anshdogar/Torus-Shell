@@ -6,8 +6,13 @@
 
 #define MAX_INPUT 1024
 #define MAX_ARGS 64
+
+#define PURPLE "\033[38;2;220;92;255m"
+#define RESET "\033[0m"
 int main(){
 
+
+    printf(PURPLE"\n\n\n________/\\\\\\\\\\\\\\\\\\__/\\\\\\_____\n_____/\\\\\\////////__\\///\\\\\\___\n___/\\\\\\/_____________\\//\\\\\\__\n__/\\\\\\________________\\//\\\\\\_\n_\\/\\\\\\_________________\\/\\\\\\_\n_\\//\\\\\\________________/\\\\\\__\n__\\///\\\\\\_____________/\\\\\\___\n____\\////\\\\\\\\\\\\\\\\\\__/\\\\\\/____\n_______\\/////////__\\///______\n\n\n");
     char input[MAX_INPUT];
 
     char* args[MAX_ARGS];
@@ -40,6 +45,8 @@ int main(){
         i++;
     }
 
+    
+
     args[i] = NULL;
 
     pid_t pid = fork();
@@ -52,7 +59,7 @@ int main(){
     else if(pid > 0){
         int status;
         waitpid(pid, &status, 0);
-        printf("Existing status: %d\n", status);
+        // printf("Existing status: %d\n", status);
     }
 
     else{
