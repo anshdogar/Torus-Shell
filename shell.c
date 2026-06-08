@@ -18,11 +18,18 @@ int main(){
 
     char* args[MAX_ARGS];
 
+    char* cwd[MAX_INPUT];
+
+
     while (1)
     {
         
-
+        if(getcwd(cwd, sizeof(cwd)) != NULL){
+            printf(PURPLE"(Torus %s)> "WHITE, cwd);
+        }
+        else{
         printf(PURPLE"(Torus)> "WHITE);
+        }
 
         fflush(stdout);
 
@@ -41,14 +48,25 @@ int main(){
     int i = 0;
     while (token != NULL && i < MAX_ARGS)
     {
-        args[i] = token;
+        args[i++] = token;
         token = strtok(NULL, " ");
-        i++;
     }
 
     
 
     args[i] = NULL;
+
+    if(strcmp(args[0], "cd") == 0){
+        if(args[1] == NULL){
+            perror("cd missing arguments. ");
+        }
+        else if(chdir(args[1]) != 0){
+            perror("cd failed");
+        }
+        else{
+        continue;
+        }
+    }
 
     pid_t pid = fork();
 
