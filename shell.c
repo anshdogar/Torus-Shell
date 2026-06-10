@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/wait.h>
+#include <ctype.h>
 
 #define MAX_INPUT 1024
 #define MAX_ARGS 64
@@ -18,7 +19,7 @@ int main(){
 
     char* args[MAX_ARGS];
 
-    char* cwd[MAX_INPUT];
+    char cwd[MAX_INPUT];
 
 
     while (1)
@@ -39,6 +40,23 @@ int main(){
         }
 
         input[strcspn(input, "\n")] = '\0'; //takes input string and changes all instances of new line to end character
+
+        if(strcmp(input, "") == 0){
+            continue;
+        }
+
+        int isEmpty = 0;
+
+        for(int i = 0; i < strlen(input); i++){
+            if(!(isspace(input[i]))){
+                isEmpty = 1;
+                break;
+            }
+            if(i == '\0') break;
+        }
+        if(isEmpty == 0){
+            continue;
+        }
 
         if(strcmp(input, "exit") == 0){ //compares strings for values
             printf("Goodbye.\n");
