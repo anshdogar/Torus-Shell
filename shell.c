@@ -18,7 +18,7 @@ int main(){
 
     char* args[MAX_ARGS];
 
-    char* cwd[MAX_INPUT];
+    char cwd[MAX_INPUT];
 
 
     while (1)
