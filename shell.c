@@ -137,6 +137,26 @@ int main(){
 
     shortcuts->size = 0;
 
+    size_t num_commands = sizeof(execvp_commands) / sizeof(execvp_commands[0]);
+
+
+    FILE *readShortcuts = fopen("shortcuts.txt", "r");
+    char buffer[255];
+    char* shortcutSplit[2];
+    while(fgets(buffer, 255, readShortcuts) != NULL){
+        buffer[strcspn(buffer, "\n")] = '\0';
+
+        char* shortcutInfo = strtok(buffer, " ");
+        int i = 0;
+        while (shortcutInfo != NULL && i < 2)
+    {
+        shortcutSplit[i] = shortcutInfo;
+        shortcutInfo = strtok(NULL, " ");
+        i++;
+    }
+        addShortcut(shortcutSplit[0], shortcutSplit[1], shortcuts);
+    }
+    fclose(readShortcuts);
 
 
     while (1)
@@ -212,11 +232,16 @@ int main(){
             continue;
 
         }
-        else if(contains(bef, execvp_commands, sizeof(execvp_commands)) == 1){
-            perror("shortcut for invalid existing command. ");
+        else if(contains(bef, execvp_commands, num_commands) == 1){
+            if(containsShortcut(bef, shortcuts, shortcuts->size) == 0){
+                printf("You cannot create shortcuts of existing shortcuts. To make this word a shortcut for %s, use the command: shortcut %s %s\n", bef, findShortcut(bef, shortcuts, shortcuts->size), new);
+            }
+            else{
+            printf("shortcut for invalid command.\n");
+            }
             continue;
         }
-        else if(contains(new, execvp_commands, sizeof(execvp_commands)) == 0){
+        else if(contains(new, execvp_commands, num_commands) == 0){
             printf("cannot change existing command names.\n ");
             continue;
         }
@@ -262,7 +287,7 @@ int main(){
 
     if(pid == 0){
         execvp(args[0], args);
-        printf("Not valid command. ");
+        printf("Not valid command. \n");
         exit(EXIT_FAILURE);
     }
     else if(pid > 0){
@@ -276,6 +301,15 @@ int main(){
     }
     
 }
+
+
+    FILE *writeShortcuts = fopen("shortcuts.txt", "w");
+    
+    for(int i = 0; i < shortcuts->size; i++){
+        fprintf(writeShortcuts, "%s %s\n", shortcuts->shortcuts[i]->before, shortcuts->shortcuts[i]->after);
+    }
+
+    fclose(writeShortcuts);
 
     return 0;
 }
