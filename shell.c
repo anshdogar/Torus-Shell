@@ -66,7 +66,7 @@ char* deleteShortcut(char* toDelete, struct shortcutList* shortcuts){
 
     for(size_t i = 0; i  < shortcuts->size; i++) {
         if(isDeleted == 1){
-            shortcuts[i - 1] = shortcuts[i];
+            shortcuts->shortcuts[i - 1] = shortcuts->shortcuts[i];
         }
         else{
         char* shortName = shortcuts->shortcuts[i]->after;
@@ -132,6 +132,10 @@ int main(){
     char* args[MAX_ARGS];
 
     char cwd[MAX_INPUT];
+
+    char path[MAX_INPUT];
+
+    getcwd(path, sizeof(path));
 
     struct shortcutList* shortcuts = malloc(sizeof(struct shortcutList));
 
@@ -301,6 +305,8 @@ int main(){
     }
     
 }
+
+    chdir(path);
 
 
     FILE *writeShortcuts = fopen("shortcuts.txt", "w");
