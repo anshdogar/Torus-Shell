@@ -222,6 +222,21 @@ int main(){
             char* new = args[2];
 
         if(args[1] == NULL || args[2] == NULL){
+            if(args[2] == NULL && args[1] != NULL){
+            if(strcmp(bef, "-I") == 0){
+            if(shortcuts->size <= 0){
+                printf("You do not have any shortcuts currently.\n");
+                continue;
+            }
+            printf("Current shortcuts:\n");
+            for(int i = 0; i < shortcuts->size; i++){
+            printf("%s --> %s\n", shortcuts->shortcuts[i]->before, shortcuts->shortcuts[i]->after);
+    }
+            
+            continue;
+
+        }
+            }
             printf("shortcut missing arguments.\n ");
             continue;
         }
