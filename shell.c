@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <ctype.h>
+#include"commands.h"
 
 #define MAX_INPUT 1024
 #define MAX_ARGS 64
@@ -88,42 +89,44 @@ char* deleteShortcut(char* toDelete, struct shortcutList* shortcuts){
 
 int main(){
 
-     char *execvp_commands[] = {
-    /* file system */
-    "ls", "cp", "mv", "rm", "mkdir", "rmdir", "touch", "ln",
-    "chmod", "chown", "chgrp", "stat", "du", "df", "mount", "umount",
-    "find", "locate", "pwd", "tree", "cd", "exit", "shortcut",
+//      char *execvp_commands[] = {
+//     /* file system */
+//     "ls", "cp", "mv", "rm", "mkdir", "rmdir", "touch", "ln",
+//     "chmod", "chown", "chgrp", "stat", "du", "df", "mount", "umount",
+//     "find", "locate", "pwd", "tree", "cd", "exit", "shortcut",
 
-    /* text processing */
-    "cat", "echo", "printf", "head", "tail", "grep", "sed", "awk",
-    "cut", "sort", "uniq", "wc", "tr", "tee", "xargs", "diff", "patch",
+//     /* text processing */
+//     "cat", "echo", "printf", "head", "tail", "grep", "sed", "awk",
+//     "cut", "sort", "uniq", "wc", "tr", "tee", "xargs", "diff", "patch",
 
-    /* process management */
-    "ps", "top", "kill", "killall", "pkill", "pgrep", "nice", "renice",
-    "nohup", "wait", "sleep", "time",
+//     /* process management */
+//     "ps", "top", "kill", "killall", "pkill", "pgrep", "nice", "renice",
+//     "nohup", "wait", "sleep", "time",
 
-    /* networking */
-    "ping", "curl", "wget", "ssh", "scp", "rsync", "netstat", "ss",
-    "ifconfig", "ip", "traceroute", "nslookup", "dig", "hostname",
+//     /* networking */
+//     "ping", "curl", "wget", "ssh", "scp", "rsync", "netstat", "ss",
+//     "ifconfig", "ip", "traceroute", "nslookup", "dig", "hostname",
 
-    /* archives */
-    "tar", "gzip", "gunzip", "zip", "unzip", "bzip2", "xz",
+//     /* archives */
+//     "tar", "gzip", "gunzip", "zip", "unzip", "bzip2", "xz",
 
-    /* user/system */
-    "whoami", "who", "id", "su", "sudo", "passwd", "useradd", "userdel",
-    "groupadd", "env", "printenv", "uname", "uptime", "date", "cal",
+//     /* user/system */
+//     "whoami", "who", "id", "su", "sudo", "passwd", "useradd", "userdel",
+//     "groupadd", "env", "printenv", "uname", "uptime", "date", "cal",
 
-    /* editors / viewers */
-    "vi", "vim", "nano", "less", "more", "man",
+//     /* editors / viewers */
+//     "vi", "vim", "nano", "less", "more", "man",
 
-    /* shell / scripting */
-    "sh", "bash", "python", "python3", "perl", "ruby", "node",
-    "make", "gcc", "g++", "clang",
+//     /* shell / scripting */
+//     "sh", "bash", "python", "python3", "perl", "ruby", "node",
+//     "make", "gcc", "g++", "clang",
 
-    /* misc */
-    "clear", "tput", "stty", "test", "[", "true", "false",
-    "read", "getopts", "expr"
-};
+//     /* misc */
+//     "clear", "tput", "stty", "test", "[", "true", "false",
+//     "read", "getopts", "expr"
+// };
+
+    char** execvp_commands = get_commands();
 
 
     printf(PURPLE"\n\n\n________/\\\\\\\\\\\\\\\\\\__/\\\\\\_____\n_____/\\\\\\////////__\\///\\\\\\___\n___/\\\\\\/_____________\\//\\\\\\__\n__/\\\\\\________________\\//\\\\\\_\n_\\/\\\\\\_________________\\/\\\\\\_\n_\\//\\\\\\________________/\\\\\\__\n__\\///\\\\\\_____________/\\\\\\___\n____\\////\\\\\\\\\\\\\\\\\\__/\\\\\\/____\n_______\\/////////__\\///______\n\n\n"RESET);
@@ -141,7 +144,16 @@ int main(){
 
     shortcuts->size = 0;
 
-    size_t num_commands = sizeof(execvp_commands) / sizeof(execvp_commands[0]);
+    // size_t num_commands = sizeof(execvp_commands) / sizeof(execvp_commands[0]);
+
+    if (execvp_commands == NULL) {
+    fprintf(stderr, "Could not read PATH\n");
+    return 1;
+}
+
+    size_t num_commands = 0;
+    while (execvp_commands[num_commands] != NULL)
+    num_commands++;
 
 
     FILE *readShortcuts = fopen("shortcuts.txt", "r");
